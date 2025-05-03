@@ -1,0 +1,13 @@
+# Fichiers … ignorer pour Django 
+# -------------------------------- 
+__pycache__ 
+env/ 
+*.sqlite3 
+*.log 
+.DS_Store 
+Thumbs.db 
+digitalcare/settings_local.py 
+.env 
+node_modules/ 
+.vscode/ 
+.idea/ 
