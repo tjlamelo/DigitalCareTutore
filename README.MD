@@ -54,5 +54,5 @@ pip install mysqlclient
 🚀 Installation & Configuration
 1. Clonage du projet
  
-git clone <url-du-projet>
+git clone https://github.com/tjlamelo/DigitalCareTutore.git
 cd digitalcare
