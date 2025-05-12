@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block title %}Enregistrer un Dossier - DigitalCare{% endblock %}
 
 {% block css %}
@@ -29,11 +30,28 @@
                 class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
         </div>
 
+        <!-- Gravité des allergies -->
+        <div>
+            <label for="gravite_allergie" class="block text-sm font-medium text-gray-700">Gravité des allergies</label>
+            <select name="gravite_allergie" id="gravite_allergie"
+                class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <option value="">-- Sélectionner --</option>
+                {% for key, value in gravite_allergies %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
         <!-- Groupe sanguin -->
         <div>
             <label for="groupe_sanguin" class="block text-sm font-medium text-gray-700">Groupe sanguin</label>
-            <input type="text" name="groupe_sanguin" id="groupe_sanguin" placeholder="Ex : A, B, AB, O"
+            <select name="groupe_sanguin" id="groupe_sanguin"
                 class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <option value="">-- Sélectionner --</option>
+                {% for key, value in groupes_sanguins %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <!-- Rhésus -->
@@ -42,8 +60,9 @@
             <select name="rhésus" id="rhésus"
                 class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                 <option value="">-- Sélectionner --</option>
-                <option value="+">+</option>
-                <option value="-">-</option>
+                {% for key, value in rhesus_options %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
             </select>
         </div>
 
@@ -64,8 +83,13 @@
         <!-- Pression artérielle -->
         <div>
             <label for="pression_arterielle" class="block text-sm font-medium text-gray-700">Pression artérielle</label>
-            <input type="text" name="pression_arterielle" id="pression_arterielle" placeholder="Ex : 12/8"
+            <select name="pression_arterielle" id="pression_arterielle"
                 class="w-full px-4 py-2 border rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
+                <option value="">-- Sélectionner --</option>
+                {% for key, value in pressions_arterielles %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
         </div>
 
         <!-- Température corporelle -->
