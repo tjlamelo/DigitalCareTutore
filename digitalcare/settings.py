@@ -48,6 +48,10 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'digitalcare.urls'
+AUTH_USER_MODEL = 'patients.Patient'
+
+LOGIN_REDIRECT_URL = 'patient_dashboard'
+LOGOUT_REDIRECT_URL = 'patient_login'
 
 TEMPLATES = [
     {
@@ -73,7 +77,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'digitalcaredb',         
         'USER': 'root',     
-        'PASSWORD': '',  
+        'PASSWORD': 'ottou',  
         'HOST': 'localhost',       
         'PORT': '3306',          
     }

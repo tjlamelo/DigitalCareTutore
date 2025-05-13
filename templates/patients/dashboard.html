@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Liste des Patients - DigitalCare{% endblock %}
+ 
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 text-primary">
+            <i class="bi bi-heart-pulse"></i> Tableau de bord Patients
+        </h2>
+        <p class="lead">Bienvenu, {{ user.username }}!</p>
+    </div>
+
+    {% if not user.profile_complete %}
+    <div class="alert alert-warning alert-dismissible fade show">
+        <strong>Profile Incomplet!</strong> s'il vous plait  <a href="{% url 'complete_profile' %}" class="alert-link">completer votre profile</a>.
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0"><i class="bi bi-person-badge"></i> vos Informations</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><strong>Date de naissance:</strong> {{ profile.date_of_birth }}</li>
+                        <li class="list-group-item"><strong>Genre:</strong> {{ profile.get_gender_display }}</li>
+                        <li class="list-group-item"><strong>Groupe sanguin:</strong> {{ profile.blood_type }}</li>
+                    </ul>
+                    <a href="{% url 'complete_profile' %}" class="btn btn-outline-primary mt-3">
+                        <i class="bi bi-pencil-square"></i> Mise a jour du profil
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="h5 mb-0"><i class="bi bi-telephone-plus"></i> Contact d'urgence</h3>
+                </div>
+                <div class="card-body">
+                    {% if emergency_contacts %}
+                    <div class="list-group">
+                        {% for contact in emergency_contacts %}
+                        <div class="list-group-item">
+                            <div class="d-flex w-100 justify-content-between">
+                                <h5 class="mb-1">{{ contact.full_name }}</h5>
+                                <small>{{ contact.relationship }}</small>
+                            </div>
+                            <p class="mb-1"><i class="bi bi-telephone"></i> {{ contact.phone_number }}</p>
+                            {% if contact.email %}<small><i class="bi bi-envelope"></i> {{ contact.email }}</small>{% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info mb-0">Aucun contact d'urgence ajouter</div>
+                    {% endif %}
+                    <a href="{% url 'add_emergency_contact' %}" class="btn btn-primary mt-3">
+                        <i class="bi bi-plus-circle"></i> Ajouter un contact d'urgence
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- CSS Bootstrap -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- JS Bootstrap (optionnel mais nécessaire pour certains composants) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Icônes Bootstrap Icons -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+
+{% endblock %}
