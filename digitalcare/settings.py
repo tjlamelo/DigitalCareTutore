@@ -117,5 +117,7 @@ AUTH_USER_MODEL = 'personnel.CustomUser'
 
 
 
+
+
 LOGIN_URL = '/personnel/login/'
 LOGIN_REDIRECT_URL = '/personnel/profil/'

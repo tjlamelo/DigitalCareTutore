@@ -1,0 +1,7 @@
+<h2>Profil du personnel</h2>
+<p>Nom : {{ personnel.user.get_full_name }}</p>
+<p>Spécialité : {{ personnel.specialite }}</p>
+<p>Service : {{ personnel.service }}</p>
+<p>Téléphone : {{ personnel.telephone }}</p>
+<p>Date de recrutement : {{ personnel.date_recrutement }}</p>
+<a href="{% url 'logout' %}">Se déconnecter</a>
