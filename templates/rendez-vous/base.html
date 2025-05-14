@@ -1,0 +1,33 @@
+{% load static %}
+<!-- ⬅️ Ligne ajoutée ici -->
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}DigitalCare{% endblock %}</title>
+
+    <!-- Styles globaux -->
+    <link rel="stylesheet" href="{% static 'style/main.css' %}" />
+    <!-- Chargement de Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com "></script>
+    <!-- Bloc pour charger du CSS spécifique à la page -->
+    {% block css %} {% endblock %}
+  </head>
+  <body>
+    <header>
+      <h1>DigitalCare</h1>
+    </header>
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer>
+      <p>&copy; 2025 DigitalCare</p>
+    </footer>
+
+    <!-- Scripts globaux -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Bloc pour charger des scripts spécifiques à la page -->
+    {% block js %} {% endblock %}
+  </body>
+</html>

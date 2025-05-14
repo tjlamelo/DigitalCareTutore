@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Enregistrement dans la file d’attente - DigitalCare{% endblock %}
+
+{% block css %}
+    <!-- Si tu as du CSS personnalisé pour Tailwind -->
+    <link rel="stylesheet" href="{% static 'style/file.css' %}">
+{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>File d'attente</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <div class="form-title">
+        <i class="fas fa-clipboard-list"></i> Enregistrement dans la file d’attente
+    </div>
+    <form method="POST" action="{% url 'file_attente_create' %}">
+        {% csrf_token %}
+
+        <!-- Rendez-vous associé -->
+        <div class="mb-3">
+            <label class="form-label"><i class="fas fa-calendar-check"></i> Sélectionner un rendez-vous :</label>
+            <select name="rendezvous" class="form-select" required>
+                {% for rdv in rendezvous_list %}
+                    <option value="{{ rdv.id }}">
+                        {{ rdv.patient.nom }} avec Dr {{ rdv.medecin.nom }} - {{ rdv.date_rdv|date:"d/m/Y H:i" }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Heure d'arrivée -->
+        <div class="mb-3">
+            <label class="form-label"><i class="fas fa-clock"></i> Heure d’arrivée :</label>
+            <input type="datetime-local" name="heure_arrivee" class="form-control" required>
+        </div>
+
+        <!-- Position dans la file -->
+        <div class="mb-3">
+            <label class="form-label"><i class="fas fa-sort-numeric-up"></i> Position :</label>
+            <input type="number" name="position" class="form-control" required min="1">
+        </div>
+
+        <!-- Statut en cours -->
+        <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" name="en_cours" id="en_cours">
+            <label class="form-check-label" for="en_cours">
+                <i class="fas fa-running"></i> En consultation en cours ?
+            </label>
+        </div>
+
+        <div class="d-grid">
+            <button type="submit" class="btn btn-success">
+                <i class="fas fa-plus-circle"></i> Ajouter à la file d’attente
+            </button>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>
+
+{% endblock %}
+
+{% block js %}
+    <!-- JS spécifique à cette page -->
+    <script src="{% static 'js/dossier.js' %}"></script>
+{% endblock %}
