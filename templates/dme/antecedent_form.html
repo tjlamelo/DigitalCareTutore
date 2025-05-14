@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{% if antecedent %}Modifier l'antécédent{% else %}Nouvel antécédent{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if antecedent %}Modifier{% else %}Ajouter{% endif %} un antécédent médical</h2>
+<form method="post">
+  {% csrf_token %}
+  <label>Description :</label><br>
+  <textarea name="description">{{ antecedent.description|default:'' }}</textarea><br><br>
+
+  <label>Type d'antécédent :</label><br>
+  <select name="type_antecedent">
+    {% for name, value in types_antecedents %}
+      <option value="{{ name }}" {% if antecedent.type_antecedent == name %}selected{% endif %}>{{ value }}</option>
+    {% endfor %}
+  </select><br><br>
+
+  <label>Date :</label><br>
+  <input type="date" name="date" value="{{ antecedent.date|date:"Y-m-d"|default:'' }}"><br><br>
+
+  <button type="submit">Enregistrer</button>
+</form>
+{% endblock %}

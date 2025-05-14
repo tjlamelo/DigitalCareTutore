@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Liste des antécédents{% endblock %}
+{% block content %}
+<h2>Antécédents médicaux</h2>
+<ul>
+  {% for antecedent in antecedents %}
+    <li>{{ antecedent }}
+      <a href="{% url 'antecedent_form' dossier.id antecedent.id %}">Modifier</a>
+      <a href="{% url 'supprimer_antecedent' dossier.id antecedent.id %}">Supprimer</a>
+    </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'antecedent_form' dossier.id %}">Ajouter un antécédent</a>
+{% endblock %}

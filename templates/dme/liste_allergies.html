@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Liste des allergies{% endblock %}
+{% block content %}
+<h2>Allergies</h2>
+<ul>
+  {% for allergie in allergies %}
+    <li>{{ allergie }}
+      <a href="{% url 'allergie_form' dossier.id allergie.id %}">Modifier</a>
+      <a href="{% url 'supprimer_allergie' dossier.id allergie.id %}">Supprimer</a>
+    </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'allergie_form' dossier.id %}">Ajouter une allergie</a>
+{% endblock %}

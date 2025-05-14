@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{% if hospitalisation %}Modifier l'hospitalisation{% else %}Nouvelle hospitalisation{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if hospitalisation %}Modifier{% else %}Ajouter{% endif %} une hospitalisation</h2>
+<form method="post">
+  {% csrf_token %}
+  <label>Date d'admission :</label><br>
+  <input type="datetime-local" name="date_admission" value="{{ hospitalisation.date_admission|date:"Y-m-d\TH:i"|default:'' }}" required><br><br>
+
+  <label>Date de sortie :</label><br>
+  <input type="datetime-local" name="date_sortie" value="{{ hospitalisation.date_sortie|date:"Y-m-d\TH:i"|default:'' }}"><br><br>
+
+  <label>Motif d'hospitalisation :</label><br>
+  <input type="text" name="motif_hospitalisation" value="{{ hospitalisation.motif_hospitalisation|default:'' }}" required><br><br>
+
+  <button type="submit">Enregistrer</button>
+</form>
+{% endblock %}

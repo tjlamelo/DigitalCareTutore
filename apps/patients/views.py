@@ -19,7 +19,8 @@ def register_patient(request):
             user.save()
             login(request, user)
             messages.success(request, 'Registration successful! Please complete your profile.')
-            return redirect('patient_dashboard')
+            return redirect('patients:patient_dashboard')
+
     else:
         form = PatientRegistrationForm()
     return render(request, 'patients/register.html', {'form': form})
@@ -33,7 +34,8 @@ def login_patient(request):
             user = authenticate(username=username, password=password)
             if user is not None and user.is_patient:
                 login(request, user)
-                return redirect('patient_dashboard')
+                return redirect('patients:patient_dashboard')
+
     else:
         form = PatientLoginForm()
     return render(request, 'patients/login.html', {'form': form})

@@ -37,3 +37,11 @@ class PersonnelProfile(models.Model):
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Format: '+999999999'")
     phone_number = models.CharField(validators=[phone_regex], max_length=17, blank=True)
     date_recrutement = models.DateField(null=True, blank=True)
+class EmergencyContact(models.Model):
+    personnel = models.ForeignKey(PersonnelProfile, on_delete=models.CASCADE, related_name='emergency_contacts')
+    full_name = models.CharField(max_length=100)
+    relationship = models.CharField(max_length=50)
+    phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Format: '+999999999'")
+    phone_number = models.CharField(validators=[phone_regex], max_length=17)
+    email = models.EmailField(blank=True)
+    address = models.TextField(blank=True)

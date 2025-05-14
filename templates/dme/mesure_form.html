@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}{% if mesure %}Modifier la mesure{% else %}Nouvelle mesure{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if mesure %}Modifier{% else %}Ajouter{% endif %} une mesure clinique</h2>
+<form method="post">
+  {% csrf_token %}
+  <label>Taille (cm) :</label><br>
+  <input type="number" step="0.1" name="taille" value="{{ mesure.taille|default:'' }}"><br><br>
+
+  <label>Poids (kg) :</label><br>
+  <input type="number" step="0.1" name="poids" value="{{ mesure.poids|default:'' }}"><br><br>
+
+  <label>Pression artérielle :</label><br>
+  <select name="pression_arterielle">
+    {% for name, value in pressions_arterielles %}
+      <option value="{{ name }}" {% if mesure.pression_arterielle == name %}selected{% endif %}>{{ value }}</option>
+    {% endfor %}
+  </select><br><br>
+
+  <button type="submit">Enregistrer</button>
+</form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Liste des hospitalisations{% endblock %}
+{% block content %}
+<h2>Hospitalisations</h2>
+<ul>
+  {% for hospitalisation in hospitalisations %}
+    <li>{{ hospitalisation }}
+      <a href="{% url 'hospitalisation_form' dossier.id hospitalisation.id %}">Modifier</a>
+      <a href="{% url 'supprimer_hospitalisation' dossier.id hospitalisation.id %}">Supprimer</a>
+    </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'hospitalisation_form' dossier.id %}">Ajouter une hospitalisation</a>
+{% endblock %}

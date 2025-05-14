@@ -1,62 +1,152 @@
-# apps/dossiers/views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
-from django.shortcuts import render, redirect
-from .models import DossierMedical
+from .models import DossierMedical, Allergie, AntecedentMedical, MesureClinique, Vaccination, Consultation, Hospitalisation
+from .forms import (
+    AllergieForm, AntecedentMedicalForm, MesureCliniqueForm,
+    VaccinationForm, ConsultationForm, HospitalisationForm
+)
 
-def creer_dossier_medical(request):
+@login_required
+def dossier_patient_view(request):
+    dossier, _ = DossierMedical.objects.get_or_create(patient=request.user)
+
+    model_form_map = {
+        'allergie': (Allergie, AllergieForm),
+        'antecedent': (AntecedentMedical, AntecedentMedicalForm),
+        'mesure': (MesureClinique, MesureCliniqueForm),
+        'vaccination': (Vaccination, VaccinationForm),
+        'consultation': (Consultation, ConsultationForm),
+        'hospitalisation': (Hospitalisation, HospitalisationForm),
+    }
+
+    modifier_type = request.GET.get('modifier')
+    item_id = request.GET.get('id')
+    type_form = request.GET.get('type_form') or request.POST.get('type_form')
+
+    print("TYPE_FORM:", type_form)  # 👈 Affiche dans la console le type de formulaire demandé
+
+    form = None
+
+    if modifier_type and modifier_type in model_form_map and item_id:
+        model_class, form_class = model_form_map[modifier_type]
+        item = get_object_or_404(model_class, id=item_id, dossier=dossier)
+        form = form_class(instance=item)
+    elif type_form and type_form in model_form_map:
+        model_class, form_class = model_form_map[type_form]
+        form = form_class()
+        print("FORMULAIRE CHARGÉ:", form_class.__name__)  # 👈 Pour voir quel formulaire est utilisé
+    else:
+        form = AllergieForm()
+
+    # Gestion du POST
     if request.method == 'POST':
-        # Récupérer les données du formulaire
-        antecedents_medicaux = request.POST.get('antecedents_medicaux', '')
-        allergies = request.POST.get('allergies', '')
-        groupe_sanguin = request.POST.get('groupe_sanguin', '')
-        rhésus = request.POST.get('rhésus', '')
-        taille = request.POST.get('taille')
-        poids = request.POST.get('poids')
-        pression_arterielle = request.POST.get('pression_arterielle', '')
-        temperature_corporelle = request.POST.get('temperature_corporelle')
-        frequence_cardiaque = request.POST.get('frequence_cardiaque')
-        frequence_respiratoire = request.POST.get('frequence_respiratoire')
-        saturation_oxygene = request.POST.get('saturation_oxygene')
-        diagnostic = request.POST.get('diagnostic', '')
-        traitements_en_cours = request.POST.get('traitements_en_cours', '')
-        notes_medicales = request.POST.get('notes_medicales', '')
-        recommandations = request.POST.get('recommandations', '')
+        type_form = request.POST.get('type_form')
+        item_id = request.POST.get('item_id')
 
-        # Conversions sécurisées
-        def to_float(val):
-            try:
-                return float(val) if val else None
-            except ValueError:
-                return None
+        if not type_form or type_form not in model_form_map:
+            return redirect('dossiers:dashboard')
 
-        def to_int(val):
-            try:
-                return int(val) if val else None
-            except ValueError:
-                return None
+        model_class, form_class = model_form_map[type_form]
 
-        # Création du dossier médical
-        DossierMedical.objects.create(
-            antecedents_medicaux=antecedents_medicaux,
-            allergies=allergies,
-            groupe_sanguin=groupe_sanguin,
-            rhésus=rhésus,
-            taille=to_float(taille),
-            poids=to_float(poids),
-            pression_arterielle=pression_arterielle,
-            temperature_corporelle=to_float(temperature_corporelle),
-            frequence_cardiaque=to_int(frequence_cardiaque),
-            frequence_respiratoire=to_int(frequence_respiratoire),
-            saturation_oxygene=to_int(saturation_oxygene),
-            diagnostic=diagnostic,
-            traitements_en_cours=traitements_en_cours,
-            notes_medicales=notes_medicales,
-            recommandations=recommandations
-        )
+        if item_id:
+            item = get_object_or_404(model_class, id=item_id, dossier=dossier)
+            form = form_class(request.POST, instance=item)
+        else:
+            form = form_class(request.POST)
 
-        return redirect('liste_dossiers')  # Redirige vers une vue existante
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.dossier = dossier
+            obj.save()
+            messages.success(request, f"{type_form.capitalize()} sauvegardé(e) avec succès.")
+            return redirect('dossiers:dashboard')
+        else:
+            print("ERREURS DE FORMULAIRE:", form.errors)  # 👈 Affichage des erreurs
 
-    return render(request, 'dme/dossier.html')
-def liste_dossiers_medicaux(request):
-    dossiers = DossierMedical.objects.all()
-    return render(request, 'dme.liste_dossiers.html', {'dossiers': dossiers})
+    context = {
+        'dossier': dossier,
+        'form': form,
+        'modifier': bool(modifier_type and item_id),
+        'modifier_type': modifier_type,
+        'modifier_id': item_id,
+
+        'allergies': dossier.allergies.all(),
+        'antecedents': dossier.antecedents.all(),
+        'mesures': dossier.mesures.all(),
+        'vaccinations': dossier.vaccinations.all(),
+        'consultations': dossier.consultations.all(),
+        'hospitalisations': dossier.hospitalisations.all(),
+    }
+
+    return render(request, 'dme/dossier.html', context)
+    dossier, _ = DossierMedical.objects.get_or_create(patient=request.user)
+
+    model_form_map = {
+        'allergie': (Allergie, AllergieForm),
+        'antecedent': (AntecedentMedical, AntecedentMedicalForm),
+        'mesure': (MesureClinique, MesureCliniqueForm),
+        'vaccination': (Vaccination, VaccinationForm),
+        'consultation': (Consultation, ConsultationForm),
+        'hospitalisation': (Hospitalisation, HospitalisationForm),
+    }
+
+    # Récupère les paramètres GET/POST
+    modifier_type = request.GET.get('modifier') or request.POST.get('modifier')
+    item_id = request.GET.get('id') or request.POST.get('item_id')
+    type_form = request.GET.get('type_form') or request.POST.get('type_form')
+
+    form = None
+
+    if modifier_type and modifier_type in model_form_map and item_id:
+        model_class, form_class = model_form_map[modifier_type]
+        item = get_object_or_404(model_class, id=item_id, dossier=dossier)
+        form = form_class(instance=item)
+    elif type_form and type_form in model_form_map:
+        _, form_class = model_form_map[type_form]
+        form = form_class()
+    else:
+        form = AllergieForm()
+
+    # Gestion du POST
+    if request.method == 'POST':
+        type_form = request.POST.get('type_form')
+        item_id = request.POST.get('item_id')
+
+        if not type_form or type_form not in model_form_map:
+            return redirect('dossiers:dashboard')
+
+        model_class, form_class = model_form_map[type_form]
+
+        if item_id:
+            item = get_object_or_404(model_class, id=item_id, dossier=dossier)
+            form = form_class(request.POST, instance=item)
+        else:
+            form = form_class(request.POST)
+
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.dossier = dossier
+            obj.save()
+            messages.success(request, f"{type_form.capitalize()} sauvegardé(e) avec succès.")
+            return redirect('dossiers:dashboard')
+        else:
+            print("ERREURS DE FORMULAIRE:", form.errors)  # Debuggage utile pour toi
+
+    context = {
+        'dossier': dossier,
+        'form': form,
+        'modifier': bool(modifier_type and item_id),
+        'modifier_type': modifier_type,
+        'modifier_id': item_id,
+
+        'allergies': dossier.allergies.all(),
+        'antecedents': dossier.antecedents.all(),
+        'mesures': dossier.mesures.all(),
+        'vaccinations': dossier.vaccinations.all(),
+        'consultations': dossier.consultations.all(),
+        'hospitalisations': dossier.hospitalisations.all(),
+    }
+
+    return render(request, 'dme/dossier.html', context)

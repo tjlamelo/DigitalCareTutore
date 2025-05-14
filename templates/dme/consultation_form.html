@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block title %}{% if consultation %}Modifier la consultation{% else %}Nouvelle consultation{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if consultation %}Modifier{% else %}Ajouter{% endif %} une consultation</h2>
+<form method="post">
+  {% csrf_token %}
+  <label>Motif de consultation :</label><br>
+  <input type="text" name="motif_consultation" value="{{ consultation.motif_consultation|default:'' }}" required><br><br>
+
+  <label>Traitement prescrit :</label><br>
+  <textarea name="traitement_prescrit">{{ consultation.traitement_prescrit|default:'' }}</textarea><br><br>
+
+  <button type="submit">Enregistrer</button>
+</form>
+{% endblock %}
