@@ -77,7 +77,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'digitalcaredb',         
         'USER': 'root',     
-        'PASSWORD': 'ottou',  
+        'PASSWORD': '',  
         'HOST': 'localhost',       
         'PORT': '3306',          
     }

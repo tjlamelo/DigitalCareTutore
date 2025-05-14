@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Liste des vaccinations{% endblock %}
+{% block content %}
+<h2>Vaccinations</h2>
+<ul>
+  {% for vaccination in vaccinations %}
+    <li>{{ vaccination }}
+      <a href="{% url 'vaccination_form' dossier.id vaccination.id %}">Modifier</a>
+      <a href="{% url 'supprimer_vaccination' dossier.id vaccination.id %}">Supprimer</a>
+    </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'vaccination_form' dossier.id %}">Ajouter une vaccination</a>
+{% endblock %}

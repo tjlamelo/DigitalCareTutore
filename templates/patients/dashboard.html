@@ -11,9 +11,11 @@
         <p class="lead">Bienvenu, {{ user.username }}!</p>
     </div>
 
+<a href="{% url 'dossiers:dossier_patient' %}">Dossier</a>
+
     {% if not user.profile_complete %}
     <div class="alert alert-warning alert-dismissible fade show">
-        <strong>Profile Incomplet!</strong> s'il vous plait  <a href="{% url 'complete_profile' %}" class="alert-link">completer votre profile</a>.
+        <strong>Profile Incomplet!</strong> s'il vous plait  <a href="{% url 'patients:complete_profile' %}" class="alert-link">completer votre profile</a>.
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
     {% endif %}
@@ -30,7 +32,8 @@
                         <li class="list-group-item"><strong>Genre:</strong> {{ profile.get_gender_display }}</li>
                         <li class="list-group-item"><strong>Groupe sanguin:</strong> {{ profile.blood_type }}</li>
                     </ul>
-                    <a href="{% url 'complete_profile' %}" class="btn btn-outline-primary mt-3">
+                    <a href="{% url 'patients:patient_dashboard' %}">Dashboard</a>
+
                         <i class="bi bi-pencil-square"></i> Mise a jour du profil
                     </a>
                 </div>
@@ -59,7 +62,7 @@
                     {% else %}
                     <div class="alert alert-info mb-0">Aucun contact d'urgence ajouter</div>
                     {% endif %}
-                    <a href="{% url 'add_emergency_contact' %}" class="btn btn-primary mt-3">
+                    <a href="{% url 'patients:add_emergency_contact' %}" class="btn btn-primary mt-3">
                         <i class="bi bi-plus-circle"></i> Ajouter un contact d'urgence
                     </a>
                 </div>

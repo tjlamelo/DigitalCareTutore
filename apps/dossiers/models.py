@@ -3,14 +3,16 @@ from enum import Enum
 
 # --- Modèle Patient ---
 # Tu peux décommenter cette ligne si tu as déjà un modèle Patient existant
-# from patients.models import Patient
+ 
+from patients.models import Patient   
 
 class DossierMedical(models.Model):
-   # patient = models.OneToOneField('Patient', on_delete=models.CASCADE)
+    patient = models.OneToOneField(Patient, on_delete=models.CASCADE)
     date_creation = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"Dossier médical de {self.patient}"
+        return f"Dossier médical de {self.patient.username}"
+ 
 
     class Meta:
         verbose_name = "Dossier médical"

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}{% if vaccination %}Modifier la vaccination{% else %}Nouvelle vaccination{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if vaccination %}Modifier{% else %}Ajouter{% endif %} une vaccination</h2>
+<form method="post">
+  {% csrf_token %}
+  <label>Nom du vaccin :</label><br>
+  <input type="text" name="nom_vaccin" value="{{ vaccination.nom_vaccin|default:'' }}" required><br><br>
+
+  <label>Date de vaccination :</label><br>
+  <input type="date" name="date_vaccination" value="{{ vaccination.date_vaccination|date:"Y-m-d"|default:'' }}" required><br><br>
+
+  <label>Dose :</label><br>
+  <input type="text" name="dose" value="{{ vaccination.dose|default:'' }}"><br><br>
+
+  <button type="submit">Enregistrer</button>
+</form>
+{% endblock %}

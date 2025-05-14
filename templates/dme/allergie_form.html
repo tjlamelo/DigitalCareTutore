@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{% if allergie %}Modifier l'allergie{% else %}Nouvelle allergie{% endif %}{% endblock %}
+{% block content %}
+<h2>{% if allergie %}Modifier{% else %}Ajouter{% endif %} une allergie</h2>
+<form method="post">
+  {% csrf_token %}
+  <label>Nom :</label><br>
+  <input type="text" name="nom" value="{{ allergie.nom|default:'' }}" required><br><br>
+
+  <label>Gravité :</label><br>
+  <select name="gravite">
+    {% for name, value in gravite_allergies %}
+      <option value="{{ name }}" {% if allergie.gravite == name %}selected{% endif %}>{{ value }}</option>
+    {% endfor %}
+  </select><br><br>
+
+  <button type="submit">Enregistrer</button>
+</form>
+{% endblock %}

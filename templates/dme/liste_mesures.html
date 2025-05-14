@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Mesures cliniques{% endblock %}
+{% block content %}
+<h2>Mesures Cliniques</h2>
+<ul>
+  {% for mesure in mesures %}
+    <li>{{ mesure }}
+      <a href="{% url 'mesure_form' dossier.id mesure.id %}">Modifier</a>
+      <a href="{% url 'supprimer_mesure' dossier.id mesure.id %}">Supprimer</a>
+    </li>
+  {% endfor %}
+</ul>
+<a href="{% url 'mesure_form' dossier.id %}">Ajouter une mesure</a>
+{% endblock %}
