@@ -17,12 +17,14 @@ Including another URLconf
 from django.shortcuts import redirect
 from django.contrib import admin
 from django.urls import path,include
-from personnel.views import home
+
 
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('admin/', admin.site.urls),
+    
+   path('admin/', admin.site.urls),
     path('personnel/', include('personnel.urls')),
-    path('dossiers/', include('dossiers.urls')),  
+    path('dossiers/', include('dossiers.urls')),
+    path('', home, name='home'),
+     
 ]
