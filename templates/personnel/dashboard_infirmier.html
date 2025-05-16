@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Infirmier - DigitalCare{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="display-5 text-info">
+            <i class="bi bi-clipboard2-pulse"></i> Tableau de bord Infirmier
+        </h2>
+        <p class="lead">Bonjour {{ user.username }}, vous êtes connecté en tant qu’<strong>Infirmier</strong>.</p>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white">
+                    <h3 class="h5 mb-0"><i class="bi bi-person-lines-fill"></i> Liste des patients</h3>
+                </div>
+                <div class="card-body">
+                    <p>Accéder à la liste des patients pour consulter ou mettre à jour les soins infirmiers.</p>
+                    <a href="#" class="btn btn-outline-info">Voir les patients</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-info text-white">
+                    <h3 class="h5 mb-0"><i class="bi bi-journal-medical"></i> Suivi des soins</h3>
+                </div>
+                <div class="card-body">
+                    <p>Ajouter des notes de suivi infirmier ou mettre à jour les dossiers médicaux selon les instructions du médecin.</p>
+                    <a href="#" class="btn btn-outline-info">Gérer les soins</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -9,6 +9,23 @@
             <i class="bi bi-heart-pulse"></i> Tableau de bord Patients
         </h2>
         <p class="lead">Bienvenu, {{ user.username }}!</p>
+        {% if user.is_medecin %}
+    <div class="alert alert-info mt-3">
+        Vous avez été promu <strong>Médecin</strong>. 
+        <a href="{% url 'personnel:dashboard_medecin' %}" class="btn btn-outline-primary btn-sm ms-2">Accéder au dashboard médecin</a>
+    </div>
+{% elif user.is_infirmier %}
+    <div class="alert alert-info mt-3">
+        Vous avez été promu <strong>Infirmier</strong>. 
+        <a href="{% url 'personnel:dashboard_infirmier' %}" class="btn btn-outline-primary btn-sm ms-2">Accéder au dashboard infirmier</a>
+    </div>
+{% elif user.is_personnel %}
+    <div class="alert alert-info mt-3">
+        Vous avez été promu <strong>Membre du personnel</strong>. 
+        <a href="{% url 'personnel:dashboard_personnel' %}" class="btn btn-outline-primary btn-sm ms-2">Accéder au dashboard personnel</a>
+    </div>
+{% endif %}
+
     </div>
 
 

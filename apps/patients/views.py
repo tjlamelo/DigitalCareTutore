@@ -8,7 +8,7 @@ from .forms import (
     PatientProfileForm,
     EmergencyContactForm
 )
-from .models import PatientProfile, EmergencyContact
+from .models import PatientProfile, EmergencyContact, UserRole
 from patients.models import PatientProfile
 
 def register_patient(request):
@@ -96,3 +96,14 @@ def add_emergency_contact(request):
         form = EmergencyContactForm()
     
     return render(request, 'patients/emergency_contacts.html', {'form': form})
+@property
+def is_medecin(self):
+    return self.role == UserRole.MEDECIN
+
+@property
+def is_infirmier(self):
+    return self.role == UserRole.PERSONNEL and hasattr(self, 'personnel') and self.personnel.poste == 'Infirmier'
+
+@property
+def is_personnel(self):
+    return self.role == UserRole.PERSONNEL

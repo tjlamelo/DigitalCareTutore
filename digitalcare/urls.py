@@ -21,7 +21,7 @@ urlpatterns = [
     path('', lambda request: redirect('patients:patient_register')), 
     path('admin/', admin.site.urls),
     path('patients/', include('patients.urls')),
- 
+    path('personnel/', include('personnel.urls')),
     path('dossiers/', include('dossiers.urls')),
      
 ]

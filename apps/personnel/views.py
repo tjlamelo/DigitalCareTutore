@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.http import HttpResponseForbidden
 
 from .forms import (
     PersonnelRegistrationForm, 
@@ -83,3 +86,20 @@ def complete_personnel_profile(request):
         form = PersonnelProfileForm(instance=profile)
 
     return render(request, 'personnel/profile_form.html', {'form': form})
+@login_required
+def dashboard_medecin(request):
+    if not request.user.is_medecin:
+        return HttpResponseForbidden("Accès refusé.")
+    return render(request, 'personnel/dashboard_medecin.html')
+
+@login_required
+def dashboard_infirmier(request):
+    if not request.user.is_infirmier:
+        return HttpResponseForbidden("Accès refusé.")
+    return render(request, 'personnel/dashboard_infirmier.html')
+
+@login_required
+def dashboard_personnel(request):
+    if not request.user.is_personnel:
+        return HttpResponseForbidden("Accès refusé.")
+    return render(request, 'personnel/dashboard_personnel.html')
