@@ -14,9 +14,34 @@
     {% block css %} {% endblock %}
   </head>
   <body>
-    <header>
-      <h1>DigitalCare</h1>
-    </header>
+      <!-- Navbar -->
+    <nav class="bg-white shadow-md px-4 py-3">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <!-- Logo -->
+            <a href="{% url 'patients:patient_dashboard' %}" class="text-2xl font-bold text-blue-600">
+                DigitalCare
+            </a>
+
+            <!-- Menu -->
+            <div class="hidden md:flex space-x-6">
+                <a href="{% url 'patients:patient_dashboard' %}" class="text-gray-700 hover:text-blue-600">Dashboard</a>
+                <a href="{% url 'patients:complete_profile' %}" class="text-gray-700 hover:text-blue-600">Mon Profil</a>
+                <a href="{% url 'patients:add_emergency_contact' %}" class="text-gray-700 hover:text-blue-600">Contact d'urgence</a>
+              <a href="{% url 'dossiers:dashboard' %}"  class="text-gray-700 hover:text-blue-600">Dossier</a>
+
+            </div>
+
+            <!-- Auth buttons -->
+            <div class="hidden md:flex space-x-4">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'patients:patient_logout' %}" class="text-red-500 font-semibold hover:underline">Déconnexion</a>
+                {% else %}
+                    <a href="{% url 'patients:patient_login' %}" class="text-blue-600 font-semibold hover:underline">Connexion</a>
+                    <a href="{% url 'patients:patient_register' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">S'inscrire</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
 
     <main>{% block content %}{% endblock %}</main>
 

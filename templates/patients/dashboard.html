@@ -11,7 +11,6 @@
         <p class="lead">Bienvenu, {{ user.username }}!</p>
     </div>
 
-<a href="{% url 'dossiers:dossier_patient' %}">Dossier</a>
 
     {% if not user.profile_complete %}
     <div class="alert alert-warning alert-dismissible fade show">
