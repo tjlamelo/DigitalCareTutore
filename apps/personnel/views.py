@@ -2,12 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+
 from .forms import (
     PersonnelRegistrationForm, 
     PersonnelLoginForm,
     PersonnelProfileForm,
 )
-from .models import PersonnelProfile
+
+from patients.models import PatientProfile  # 🔄 Correction ici
+
+def home(request):
+    return render(request, 'base.html')
+
 
 def register_personnel(request):
     if request.method == 'POST':
@@ -20,6 +26,7 @@ def register_personnel(request):
     else:
         form = PersonnelRegistrationForm()
     return render(request, 'personnel/register.html', {'form': form})
+
 
 def login_personnel(request):
     if request.method == 'POST':
@@ -35,16 +42,18 @@ def login_personnel(request):
         form = PersonnelLoginForm()
     return render(request, 'personnel/login.html', {'form': form})
 
+
 @login_required
 def personnel_logout(request):
     logout(request)
     return redirect('login_personnel')
 
+
 @login_required
 def personnel_dashboard(request):
     try:
-        profile = request.user.profile
-    except PersonnelProfile.DoesNotExist:
+        profile = request.user.profile  # fonctionne avec related_name='profile'
+    except PatientProfile.DoesNotExist:
         profile = None
 
     context = {
@@ -52,18 +61,19 @@ def personnel_dashboard(request):
     }
     return render(request, 'personnel/dashboard.html', context)
 
+
 @login_required
 def complete_personnel_profile(request):
     try:
         profile = request.user.profile
-    except PersonnelProfile.DoesNotExist:
+    except PatientProfile.DoesNotExist:
         profile = None
 
     if request.method == 'POST':
         form = PersonnelProfileForm(request.POST, instance=profile)
         if form.is_valid():
             profile = form.save(commit=False)
-            profile.user = request.user
+            profile.patient = request.user  # ⚠️ champ = 'patient', pas 'user'
             profile.save()
             request.user.profile_complete = True
             request.user.save()

@@ -9,6 +9,7 @@ from .forms import (
     EmergencyContactForm
 )
 from .models import PatientProfile, EmergencyContact
+from patients.models import PatientProfile
 
 def register_patient(request):
     if request.method == 'POST':

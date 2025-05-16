@@ -1,6 +1,7 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser, PersonnelProfile 
+from .models import PersonnelSante
 
-admin.site.register(CustomUser, UserAdmin)
-
+@admin.register(PersonnelSante)
+class PersonnelSanteAdmin(admin.ModelAdmin):
+    list_display = ('utilisateur', 'specialite', 'service', 'matricule', 'is_actif')
+    search_fields = ('utilisateur__username', 'matricule', 'specialite')

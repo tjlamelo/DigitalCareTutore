@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Apps locales (dans apps/)
+    
     'patients',
     'personnel',
     'dossiers',
@@ -113,7 +114,8 @@ STATICFILES_DIRS = [
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-AUTH_USER_MODEL = 'personnel.CustomUser'
+AUTH_USER_MODEL = 'patients.Patient'
+
 
 
 
