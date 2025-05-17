@@ -1,22 +1,62 @@
 {% extends "base.html" %}
-{% block title %}{% if antecedent %}Modifier l'antécédent{% else %}Nouvel antécédent{% endif %}{% endblock %}
+
+{% block title %}
+  {% if antecedent %}Modifier l'antécédent{% else %}Nouvel antécédent{% endif %}
+{% endblock %}
+
 {% block content %}
-<h2>{% if antecedent %}Modifier{% else %}Ajouter{% endif %} un antécédent médical</h2>
-<form method="post">
-  {% csrf_token %}
-  <label>Description :</label><br>
-  <textarea name="description">{{ antecedent.description|default:'' }}</textarea><br><br>
+  <div class="max-w-lg mx-auto mt-10 p-6 bg-white shadow-md rounded-lg border border-gray-200">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">
+      {% if antecedent %}Modifier{% else %}Ajouter{% endif %} un antécédent médical
+    </h2>
 
-  <label>Type d'antécédent :</label><br>
-  <select name="type_antecedent">
-    {% for name, value in types_antecedents %}
-      <option value="{{ name }}" {% if antecedent.type_antecedent == name %}selected{% endif %}>{{ value }}</option>
-    {% endfor %}
-  </select><br><br>
+    <form method="post">
+      {% csrf_token %}
 
-  <label>Date :</label><br>
-  <input type="date" name="date" value="{{ antecedent.date|date:"Y-m-d"|default:'' }}"><br><br>
+      <!-- Description -->
+      <div class="mb-4">
+        <label for="id_description" class="block text-sm font-medium text-gray-700 mb-1">Description :</label>
+        <textarea name="description" id="id_description" rows="4"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">{{ antecedent.description|default:'' }}</textarea>
+      </div>
 
-  <button type="submit">Enregistrer</button>
-</form>
+      <!-- Type d'antécédent -->
+      <div class="mb-4">
+        <label for="id_type_antecedent" class="block text-sm font-medium text-gray-700 mb-1">Type d'antécédent :</label>
+        <select name="type_antecedent" id="id_type_antecedent" required
+                class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="">-- Sélectionnez un type d'antécédent --</option>
+          {% for name, value in type_antecedents %}
+            <option value="{{ name }}" {% if antecedent.type_antecedent == name %}selected{% endif %}>{{ value }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Date -->
+      <div class="mb-6">
+        <label for="id_date" class="block text-sm font-medium text-gray-700 mb-1">Date :</label>
+        <input type="date" name="date" id="id_date"
+               value="{{ antecedent.date|date:"Y-m-d"|default:'' }}"
+               class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <!-- Bouton Enregistrer -->
+      <div>
+        <button type="submit"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-md transition duration-200">
+          Enregistrer
+        </button>
+      </div>
+    </form>
+
+    <!-- Afficher les antécédents existants -->
+    <h3 class="text-lg font-semibold mt-6">Antécédents existants</h3>
+    <ul class="mt-4">
+      {% for antecedent in antecedents %}
+        <li>{{ antecedent.description }} (Type: {{ antecedent.get_type_antecedent_display }}) - Date: {{ antecedent.date }}</li>
+      {% empty %}
+        <li>Aucun antécédent enregistré.</li>
+      {% endfor %}
+    </ul>
+  </div>
 {% endblock %}
