@@ -8,7 +8,6 @@ from .views import (
     add_emergency_contact
 )
 app_name = 'patients' 
-
 urlpatterns = [
     path('register/', register_patient, name='patient_register'),
     path('login/', login_patient, name='patient_login'),

@@ -1,0 +1,99 @@
+{% load static %}
+<!-- ⬅️ Ligne ajoutée ici -->
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}DigitalCare{% endblock %}</title>
+    <!-- Bootstrap 5 -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- Styles globaux -->
+    <link rel="stylesheet" href="{% static 'style/main.css' %}" />
+    <!-- Chargement de Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com "></script>
+    <!-- Bloc pour charger du CSS spécifique à la page -->
+    {% block css %} {% endblock %}
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md px-4 py-3">
+      <div class="max-w-7xl mx-auto flex justify-between items-center">
+        <!-- Logo -->
+        <a
+          href="{% url 'patients:patient_dashboard' %}"
+          class="text-2xl font-bold text-blue-600"
+        >
+          DigitalCare
+        </a>
+
+        <!-- Menu -->
+        <div class="hidden md:flex space-x-6">
+          <a
+            href="{% url 'patients:patient_dashboard' %}"
+            class="text-gray-700 hover:text-blue-600"
+            >Dashboard</a
+          >
+          <a
+            href="{% url 'patients:complete_profile' %}"
+            class="text-gray-700 hover:text-blue-600"
+            >Mon Profil</a
+          >
+          <a
+            href="{% url 'patients:add_emergency_contact' %}"
+            class="text-gray-700 hover:text-blue-600"
+            >Contact d'urgence</a
+          >
+          <a
+            href="{% url 'dossiers:dashboard' %}"
+            class="text-gray-700 hover:text-blue-600"
+            >Dossier</a
+          >
+        </div>
+
+        <!-- Auth buttons -->
+        <div class="hidden md:flex space-x-4">
+          {% if user.is_authenticated %}
+          <a
+            href="{% url 'patients:patient_logout' %}"
+            class="text-red-500 font-semibold hover:underline"
+            >Déconnexion</a
+          >
+          {% else %}
+          <a
+            href="{% url 'patients:patient_login' %}"
+            class="text-blue-600 font-semibold hover:underline"
+            >Connexion</a
+          >
+          <a
+            href="{% url 'patients:patient_register' %}"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >S'inscrire</a
+          >
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer>
+      <p>&copy; 2025 DigitalCare</p>
+    </footer>
+
+    <!-- Scripts globaux -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+    <!-- Bloc pour charger des scripts spécifiques à la page -->
+    {% block js %} {% endblock %}
+  </body>
+</html>
