@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from rendezvous.models import RendezVous
+from patients.models import PatientProfile
+
 from .forms import (
     PatientRegistrationForm, 
     PatientLoginForm,
@@ -47,18 +50,36 @@ def patient_logout(request):
 @login_required
 def patient_dashboard(request):
     if not request.user.is_patient:
+<<<<<<< HEAD
         return redirect('patients:patient_login') 
     
+=======
+        return redirect('patients:patient_login')
+
+>>>>>>> rendez-vous
     try:
-        profile = request.user.profile
+        profile = PatientProfile.objects.get(patient=request.user)
     except PatientProfile.DoesNotExist:
         profile = None
-    
+
+    emergency_contacts = EmergencyContact.objects.filter(patient=request.user)
+
+    # ✅ ici on utilise bien le profil, pas le user
+    mes_rendezvous = RendezVous.objects.filter(patient=profile)
+
+    rendezvous_existe = mes_rendezvous.exists()
+
     context = {
         'profile': profile,
-        'emergency_contacts': EmergencyContact.objects.filter(patient=request.user)
+        'emergency_contacts': emergency_contacts,
+        'rendezvous_existe': rendezvous_existe,
+        'rendezvous': mes_rendezvous.first(),
+        'mes_rendezvous': mes_rendezvous,
     }
+
     return render(request, 'patients/dashboard.html', context)
+
+
 
 @login_required
 def complete_profile(request):

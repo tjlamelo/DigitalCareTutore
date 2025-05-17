@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Rendez-vous - DigitalCare{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Prise de Rendez-vous - DigitalCare</title>
+<link rel="stylesheet" href="{% static 'style/rendez-vous.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+<div class="form-container">
+  <h2><i class="fas fa-calendar-plus"></i> Prise de Rendez-vous</h2>
+  <form method="POST" action="{% url 'rendezvous:prise_rdv' %}">
+    {% csrf_token %}
+
+    <!-- Patient affiché -->
+    <div class="form-group">
+      <label><i class="fas fa-user"></i> Patient</label>
+      <input type="text" value="{{ user.username }}" readonly>
+    </div>
+
+    <!-- Médecin -->
+    <div class="form-group">
+      <label><i class="fas fa-user-md"></i> Médecin</label>
+      <select name="medecin" required>
+        {% for medecin in medecins %}
+          <option value="{{ medecin.id }}">{{ medecin.patient.username }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <!-- Date de prise -->
+    <div class="form-group">
+      <label><i class="fas fa-calendar-plus"></i> Date de la prise</label>
+      <input type="datetime-local" name="datePriseRendevous" required>
+    </div>
+
+    <!-- Date du rendez-vous -->
+    <div class="form-group">
+      <label><i class="fas fa-calendar-check"></i> Date du rendez-vous</label>
+      <input type="datetime-local" name="date_rdv" required>
+    </div>
+
+    <!-- Service -->
+    <div class="form-group">
+      <label><i class="fas fa-stethoscope"></i> Service</label>
+      <input type="text" name="service" placeholder="Ex : Cardiologie" required>
+    </div>
+
+    <!-- Statut -->
+    <div class="form-group">
+      <label><i class="fas fa-info-circle"></i> Statut</label>
+      <select name="statut">
+        <option value="En attente">En attente</option>
+        <option value="Confirmé">Confirmé</option>
+        <option value="Annulé">Annulé</option>
+        <option value="Terminé">Terminé</option>
+      </select>
+    </div>
+
+    <!-- Rappel -->
+    <div class="form-check">
+      <input type="checkbox" name="rappel_envoye" id="rappelEnvoye">
+      <label for="rappelEnvoye"><i class="fas fa-bell"></i> Rappel envoyé</label>
+    </div>
+
+    <!-- Bouton -->
+    <div class="form-actions">
+      <button type="submit"><i class="fas fa-paper-plane"></i> Envoyer</button>
+    </div>
+  </form>
+</div>
+
+
+</div>
+{% endblock %}

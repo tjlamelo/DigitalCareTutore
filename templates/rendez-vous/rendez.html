@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'style/rendez.css' %}">
+
+<div class="container">
+  <h2><i class="fas fa-calendar-check"></i> Modifier un rendez-vous 🩺</h2>
+
+  <form method="POST" action="{% url 'rendezvous:modifier_rdv' rdv.id %}">
+    {% csrf_token %}
+
+    <!-- Patient -->
+    <label for="patient"><i class="fas fa-user"></i> Patient</label>
+    <select name="patient" id="patient" required>
+      {% for patient in patients %}
+        <option value="{{ patient.patient.id }}" {% if rdv.patient.id == patient.patient.id %}selected{% endif %}>
+          {{ patient.patient.username }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <!-- Médecin -->
+    <label for="medecin"><i class="fas fa-user-md"></i> Médecin</label>
+    <select name="medecin" id="medecin" required>
+      {% for medecin in medecins %}
+        <option value="{{ medecin.patient.id }}" {% if rdv.medecin.id == medecin.patient.id %}selected{% endif %}>
+          {{ medecin.patient.username }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <!-- Date prise -->
+    <label for="datePriseRendevous"><i class="fas fa-clock"></i> Date de la prise</label>
+    <input type="datetime-local" name="datePriseRendevous" id="datePriseRendevous"
+           value="{{ rdv.datePriseRendevous|date:'Y-m-d\\TH:i' }}" required>
+
+    <!-- Date rendez-vous -->
+    <label for="date_rdv"><i class="fas fa-calendar-alt"></i> Date du rendez-vous</label>
+    <input type="datetime-local" name="date_rdv" id="date_rdv"
+           value="{{ rdv.date_rdv|date:'Y-m-d\\TH:i' }}" required>
+
+    <!-- Service -->
+    <label for="service"><i class="fas fa-stethoscope"></i> Service</label>
+    <input type="text" name="service" id="service" value="{{ rdv.service }}" required>
+
+    <!-- Statut -->
+    <label for="statut"><i class="fas fa-info-circle"></i> Statut</label>
+    <select name="statut" id="statut">
+      {% for s in statuts %}
+        <option value="{{ s }}" {% if rdv.statut == s %}selected{% endif %}>{{ s }}</option>
+      {% endfor %}
+    </select>
+
+    <!-- Rappel -->
+    <div class="form-check">
+      <input type="checkbox" name="rappel_envoye" id="rappel_envoye"
+             {% if rdv.rappel_envoye %}checked{% endif %}>
+      <label for="rappel_envoye"><i class="fas fa-bell"></i> Rappel envoyé</label>
+    </div>
+
+    <button type="submit" class="submit-btn">
+      Modifier le rendez-vous <i class="fas fa-paper-plane"></i>
+    </button>
+  </form>
+</div>
+{% endblock %}
