@@ -20,7 +20,7 @@ def register_patient(request):
             user.save()
             login(request, user)
             messages.success(request, 'Registration successful! Please complete your profile.')
-            return redirect('patients:patient_dashboard')  # ✅ Correction ici
+            return redirect('patients:patient_dashboard')  
     else:
         form = PatientRegistrationForm()
     return render(request, 'patients/register.html', {'form': form})
@@ -42,12 +42,12 @@ def login_patient(request):
 @login_required
 def patient_logout(request):
     logout(request)
-    return redirect('patients:patient_login')  # ✅ Correction ici
+    return redirect('patients:patient_login')  
 
 @login_required
 def patient_dashboard(request):
     if not request.user.is_patient:
-        return redirect('patients:patient_login')  # ✅ Correction ici
+        return redirect('patients:patient_login') 
     
     try:
         profile = request.user.profile
@@ -76,7 +76,7 @@ def complete_profile(request):
             request.user.profile_complete = True
             request.user.save()
             messages.success(request, 'Profile updated successfully!')
-            return redirect('patients:patient_dashboard')  # ✅ Correction ici
+            return redirect('patients:patient_dashboard')  
     else:
         form = PatientProfileForm(instance=profile)
     
@@ -91,7 +91,7 @@ def add_emergency_contact(request):
             contact.patient = request.user
             contact.save()
             messages.success(request, 'Emergency contact added successfully!')
-            return redirect('patients:patient_dashboard')  # ✅ Correction ici
+            return redirect('patients:patient_dashboard')  
     else:
         form = EmergencyContactForm()
     

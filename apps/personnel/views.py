@@ -1,9 +1,7 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
 from django.http import HttpResponseForbidden
 
 from .forms import (
@@ -12,7 +10,7 @@ from .forms import (
     PersonnelProfileForm,
 )
 
-from patients.models import PatientProfile  # 🔄 Correction ici
+from patients.models import Patient, PatientProfile, UserRole  # 🔄 Correction ici
 
 def home(request):
     return render(request, 'base.html')
@@ -86,11 +84,32 @@ def complete_personnel_profile(request):
         form = PersonnelProfileForm(instance=profile)
 
     return render(request, 'personnel/profile_form.html', {'form': form})
+
 @login_required
 def dashboard_medecin(request):
     if not request.user.is_medecin:
         return HttpResponseForbidden("Accès refusé.")
-    return render(request, 'personnel/dashboard_medecin.html')
+
+    # Récupère tous les patients
+    patients = Patient.objects.filter(role=UserRole.PATIENT)
+    patient_id = request.GET.get('patient')
+    if patient_id:
+        patient = get_object_or_404(Patient, id=patient_id)
+    else:
+        patient = patients.first()  # Sélection automatique du premier patient
+
+    # Récupère le profil du patient sélectionné
+    try:
+        profile = patient.profile
+    except (AttributeError, PatientProfile.DoesNotExist):
+        profile = None
+
+    context = {
+        'patients': patients,
+        'patient': patient,
+        'profile': profile,
+    }
+    return render(request, 'personnel/dashboard_medecin.html', context)
 
 @login_required
 def dashboard_infirmier(request):

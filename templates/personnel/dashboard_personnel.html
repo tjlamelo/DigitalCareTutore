@@ -1,40 +1,58 @@
 {% extends 'base.html' %}
-
-{% block title %}Dashboard Administrateur - DigitalCare{% endblock %}
-
+{% block title %}Dashboard Personnel - DigitalCare{% endblock %}
 {% block content %}
 <div class="container py-5">
     <div class="text-center mb-5">
-        <h2 class="display-5 text-warning">
-            <i class="bi bi-building-gear"></i> Tableau de bord Administratif
-        </h2>
-        <p class="lead">Bonjour {{ user.username }}, vous êtes connecté en tant que <strong>Membre du personnel administratif</strong>.</p>
+        <h2 class="display-5 text-dark"><i class="bi bi-people-fill"></i> Tableau de bord Personnel</h2>
+        <p class="lead">Bienvenue {{ user.get_full_name }}</p>
     </div>
 
-    <div class="row">
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-warning text-dark">
-                    <h3 class="h5 mb-0"><i class="bi bi-people"></i> Gestion des utilisateurs</h3>
-                </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm border-dark">
                 <div class="card-body">
-                    <p>Afficher ou modifier les rôles des utilisateurs, y compris les patients, médecins et infirmiers.</p>
-                    <a href="#" class="btn btn-outline-warning">Gérer les utilisateurs</a>
+                    <h5 class="card-title"><i class="bi bi-hospital"></i> Services actifs</h5>
+                    <p class="card-text display-6">{{ nb_services }}</p>
                 </div>
             </div>
         </div>
-
-        <div class="col-lg-6 mb-4">
-            <div class="card shadow-sm h-100">
-                <div class="card-header bg-warning text-dark">
-                    <h3 class="h5 mb-0"><i class="bi bi-journal-check"></i> Statistiques & Rapports</h3>
-                </div>
-                <div class="card-body">
-                    <p>Accéder aux statistiques du système de santé et générer des rapports.</p>
-                    <a href="#" class="btn btn-outline-warning">Voir les rapports</a>
-                </div>
+        <div class="col-md-8">
+            <div class="card shadow-sm border-dark">
+                <div class="card-header bg-dark text-white">Notifications récentes</div>
+                <ul class="list-group list-group-flush">
+                    {% for notif in notifications %}
+                        <li class="list-group-item">{{ notif.message }} - <small>{{ notif.date }}</small></li>
+                    {% empty %}
+                        <li class="list-group-item text-muted">Aucune notification</li>
+                    {% endfor %}
+                </ul>
             </div>
+        </div>
+    </div>
+
+    <div class="card mt-5">
+        <div class="card-body">
+            <canvas id="staffChart" height="100"></canvas>
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const categories = JSON.parse(document.getElementById('categories-data').textContent);
+    const staffData = JSON.parse(document.getElementById('staff-data').textContent);
+    const ctx = document.getElementById('staffChart');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: staffData,
+                backgroundColor: ['#0d6efd', '#dc3545', '#ffc107']
+            }]
+        }
+    });
+</script>
+{{ categories|json_script:"categories-data" }}
+{{ staff_data|json_script:"staff-data" }}
 {% endblock %}
